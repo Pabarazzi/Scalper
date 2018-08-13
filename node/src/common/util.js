@@ -17,7 +17,7 @@ const domainToIpV4 = async function (domain) {
   return result
 }
 
-const test = function (ip) {
+const TTL = function (ip) {
   return new Promise((resolve, reject) => {
     tcpp.ping({ address: ip }, function(err, data) {
       if (err) {
@@ -37,7 +37,7 @@ async function fastDomain(domain) {
   if (!domain) return
   const result = await domainToIpV4(domain)
   if (!result || result.length === 0) return
-  const promises = result.map((item) => test(item))
+  const promises = result.map((item) => TTL(item))
   const results = await Promise.all(promises)
   return results.sort(compare)[0]
 }
