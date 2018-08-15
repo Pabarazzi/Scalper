@@ -36,7 +36,3 @@ async function fetchAndUpdateMetaInfo() {
         return Promise.reject(e);
     }
 }
-
-
-
-
