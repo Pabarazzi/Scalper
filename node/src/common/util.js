@@ -17,6 +17,12 @@ const domainToIpV4 = async function (domain) {
   return result
 }
 
+/**
+ * 探测
+ * @param ip
+ * @returns {Promise}
+ * @constructor
+ */
 const TTL = function (ip) {
   return new Promise((resolve, reject) => {
     tcpp.ping({ address: ip }, function(err, data) {
@@ -33,15 +39,19 @@ function compare (t1, t2) {
   return t1.avg - t2.avg
 }
 
-async function fastDomain(domain) {
+/**
+ *
+ * @param domain 待解析的域名
+ * @param dnsList 全国各省市dns地址列表
+ * @returns {Promise.<T|*>}
+ */
+async function fastDomain(domain, dnsList) {
   if (!domain) return
-  const result = await domainToIpV4(domain)
-  if (!result || result.length === 0) return
-  const promises = result.map((item) => TTL(item))
+  const promises = dnsList.map((item) => TTL(item))
   const results = await Promise.all(promises)
   return results.sort(compare)[0]
 }
 
 
 
-export { fastDomain }
+exports = module.exports = fastDomain
