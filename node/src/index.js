@@ -1,24 +1,13 @@
-const fastDomain = require('./common/util')
-const nslookup = require('nslookup')
-const dnsList = require('./common/CHINA-DNS')
-const domain = 'www.228.com.cn'
+const fastDomain = require('./common/util');
+const nslookup = require('nslookup');
+const domain = 'www.228.com.cn';
+const DNS = require('./router/dns');
 
-let dnsIpList = []
-dnsList.forEach((dns) => {
-  // TODO 多线程
-  nslookup(domain)
-      .server(dns) // default is 8.8.8.8
-      .type('a') // default is 'a'
-      .timeout(10 * 1000) // default is 3 * 1000 ms
-      .end(function (err, addrs) {
-        dnsIpList = dnsIpList.concat(addrs)
-      });
+
+const dnsPromise = new DNS();
+
+dnsPromise.then(instance => {
+    console.log(instance.listServerIp());
+}).catch(e => {
+    console.log(e)
 })
-
-setTimeout(() => {
-  dnsIpList = dnsIpList.filter(item => item !== undefined)
-  fastDomain(domain, dnsIpList).then(result => console.log(result))
-}, 3000)
-
-
-
