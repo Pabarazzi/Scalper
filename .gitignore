@@ -1,3 +1,6 @@
+# IDE
+.idea/*
+
 # Logs
 logs
 *.log
@@ -59,3 +62,6 @@ typings/
 
 # next.js build output
 .next
+
+# package
+package-lock.json
